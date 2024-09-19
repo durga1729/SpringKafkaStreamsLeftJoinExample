@@ -2,7 +2,7 @@ package com.vishaluplanch.kafka.producer;
 
 import com.vishaluplanch.kafka.avro.schema.Department;
 import com.vishaluplanch.kafka.avro.schema.Employee;
-import com.vishaluplanch.kafka.util.BankUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;

@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>com.vishaluplanch.kafka</groupId>
-    <artifactId>spring-kafka-stream-join-operations</artifactId>
+    <artifactId>SpringKafkaStreamsLeftJoinExample</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
