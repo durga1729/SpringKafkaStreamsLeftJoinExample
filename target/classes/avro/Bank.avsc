@@ -1,0 +1,43 @@
+{
+  "type": "record",
+  "name": "Bank",
+  "namespace": "com.vishaluplanch.kafka.avro.schema",
+  "fields": [
+    {
+      "name": "customerUniqueIdentification",
+      "type": "long",
+      "default": -1
+    },
+    {
+      "name": "accountNumber",
+      "type": "int",
+      "default": -1
+    },
+    {
+      "name": "currentBalance",
+      "type": "double",
+      "default": 0.0
+    },
+    {
+      "name": "accountHolderName",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "bankCode",
+      "type": "int",
+      "default": -1
+    },
+    {
+      "name": "bankName",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    }
+  ]
+}

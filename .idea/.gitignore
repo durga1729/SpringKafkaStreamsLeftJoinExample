@@ -1,0 +1,5 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# CodeStream ignored files
+/../../spring-kafka-stream-join-operations\.idea/codestream.xml

@@ -1,0 +1,33 @@
+{
+  "type": "record",
+  "name": "EmployeeDepartment",
+  "namespace": "com.vishaluplanch.kafka.avro.schema",
+  "fields": [
+    {
+      "name": "id",
+      "type": "long",
+      "default": -1
+    },
+    {
+      "name": "name",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "departmentId",
+      "type": "int",
+      "default": 0
+    },
+    {
+      "name": "departmentName",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "type": "record",
+  "name": "Department",
+  "namespace": "com.vishaluplanch.kafka.avro.schema",
+  "fields": [
+    {
+      "name": "departmentName",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "departmentId",
+      "type": "int",
+      "default": 0
+    }
+  ]
+}
