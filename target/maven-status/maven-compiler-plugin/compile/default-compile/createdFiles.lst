@@ -1,10 +1,13 @@
 com\vishaluplanch\kafka\avro\schema\Employee$Builder.class
 com\vishaluplanch\kafka\avro\schema\EmployeeDepartment$Builder.class
 com\vishaluplanch\kafka\joiner\EmployeeValueJoiner.class
+com\vishaluplanch\kafka\avro\schema\Account.class
 com\vishaluplanch\kafka\Application.class
+com\vishaluplanch\kafka\stream\processor\AccountProcessor.class
 com\vishaluplanch\kafka\producer\EventPublisher.class
 com\vishaluplanch\kafka\avro\schema\Employee.class
 com\vishaluplanch\kafka\avro\schema\Department$Builder.class
 com\vishaluplanch\kafka\avro\schema\Department.class
 com\vishaluplanch\kafka\avro\schema\EmployeeDepartment.class
+com\vishaluplanch\kafka\avro\schema\Account$Builder.class
 com\vishaluplanch\kafka\stream\processor\CustomerAccountStreamProcessor.class

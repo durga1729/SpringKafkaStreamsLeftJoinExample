@@ -1,0 +1,33 @@
+{
+  "type": "record",
+  "name": "Account",
+  "namespace": "com.vishaluplanch.kafka.avro.schema",
+  "fields": [
+    {
+      "name": "id",
+      "type": "long",
+      "default": -1
+    },
+    {
+      "name": "name",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "accountStatus",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "balance",
+      "type": "int",
+      "default": 0
+    }
+  ]
+}

@@ -1,9 +1,9 @@
 package com.vishaluplanch.kafka.stream.processor;
 
+import com.vishaluplanch.kafka.avro.schema.Account;
 import com.vishaluplanch.kafka.avro.schema.Department;
 import com.vishaluplanch.kafka.avro.schema.Employee;
 import com.vishaluplanch.kafka.avro.schema.EmployeeDepartment;
-
 import com.vishaluplanch.kafka.joiner.EmployeeValueJoiner;
 import io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig;
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
@@ -24,13 +24,16 @@ import java.time.Duration;
 import java.util.HashMap;
 
 @Service
-public class CustomerAccountStreamProcessor {
+public class AccountProcessor {
+    @Value("${spring.kafka.account.in.topic}")
+    private String accountIn;
 
-    @Value("${spring.kafka.abc.emp.topic}")
-    private String abcBankAccountTopic;
+    @Value("${spring.kafka.account.out.topic}")
+    private String accountOut;
 
-    @Value("${spring.kafka.xyz.dept.topic}")
-    private String xyzBankAccountTopic;
+
+    @Value("${spring.kafka.account.balance.topic}")
+    private String balanceTopic;
 
     @Autowired
     private StreamsBuilder streamBuilder;
@@ -38,22 +41,30 @@ public class CustomerAccountStreamProcessor {
     @Autowired
     private KafkaProperties kafkaProperties;
 
+
     @PostConstruct
-    public void joinEmployee() {
-        KStream<Long, Employee> xyzKStream = streamBuilder.stream(abcBankAccountTopic, Consumed.with(Serdes.Long(), this.getSpecificAvroSerde(new SpecificAvroSerde<>())));
+    public void filterAccounts() {
+        KStream<Long, Account> accountStream = streamBuilder.stream(accountIn, Consumed.with(Serdes.Long(), this.getSpecificAvroSerde(new SpecificAvroSerde<>())));
 
-        KStream<Long, Department> abcKStream = streamBuilder.stream(xyzBankAccountTopic, Consumed.with(Serdes.Long(), this.getSpecificAvroSerde(new SpecificAvroSerde<>())));
+        // Filter accounts based on status and forward to a new topic
+        KStream<Long, Account> filteredAccounts = accountStream
+                .filter((key, account) -> "ACTIVE".equalsIgnoreCase(account.getAccountStatus().toString()));
 
-        KStream<Long, EmployeeDepartment> joinedStream = xyzKStream.leftJoin(abcKStream, new EmployeeValueJoiner(), JoinWindows.of(Duration.ofMinutes(1)), StreamJoined.with(Serdes.Long(), this.getSpecificAvroSerde(new SpecificAvroSerde<>()), this.getSpecificAvroSerde(new SpecificAvroSerde<>())));
-        joinedStream.filter((key, value) -> key != null && value != null)
-                .peek((key, mergedAccountDetail) -> System.out.println("Key =>" + key + " Value in Join =>" + mergedAccountDetail.toString()));
+        // Send filtered accounts to output topic
+        filteredAccounts.to(accountOut, Produced.with(Serdes.Long(), this.getSpecificAvroSerde(new SpecificAvroSerde<>())));
 
-        joinedStream.filter((key,value)->key !=null && value != null).to("EMP_DEPARTMENT_TOPIC", Produced.with(Serdes.Long(), this.getSpecificAvroSerde(new SpecificAvroSerde<>())));
-        Topology topology=streamBuilder.build();
-        KafkaStreams streams=new KafkaStreams(topology,new StreamsConfig(kafkaProperties.buildStreamsProperties()));
+
+        KStream<Long, Account> filteredAccountsByBalance = accountStream
+                .filter((key, account) -> account.getBalance() < 10000);
+
+        // Send filtered accounts to output topic
+        filteredAccountsByBalance.to(balanceTopic, Produced.with(Serdes.Long(), this.getSpecificAvroSerde(new SpecificAvroSerde<>())));
+
+
+        Topology topology = streamBuilder.build();
+        KafkaStreams streams = new KafkaStreams(topology, new StreamsConfig(kafkaProperties.buildStreamsProperties()));
         streams.start();
     }
-
 
 
     <T extends SpecificRecord> SpecificAvroSerde<T> getSpecificAvroSerde(SpecificAvroSerde<T> serde) {
